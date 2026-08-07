@@ -44,3 +44,64 @@
 // =============================================================================
 
 
+const readlineSync = require('readline-sync');
+
+function getSum(arr) {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+function getAverage(arr) {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    return sum / arr.length;
+}
+
+function getMax(arr) {
+    let maxVal = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] > maxVal) {
+            maxVal = arr[i];
+        }
+    }
+    return maxVal;
+}
+
+function getMin(arr) {
+    let minVal = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] < minVal) {
+            minVal = arr[i];
+        }
+    }
+    return minVal;
+}
+
+function main() {
+    const n = readlineSync.questionInt("How many numbers? ");
+
+    if (n <= 0) {
+        console.log("Error: Please enter a positive number of values.");
+        return;
+    }
+
+    const numbers = [];
+
+    for (let i = 0; i < n; i++) {
+        const value = readlineSync.questionInt(`Enter number ${i + 1}: `);
+        numbers.push(value);
+    }
+
+    console.log("\nResults:");
+    console.log("Sum:     " + getSum(numbers));
+    console.log("Average: " + getAverage(numbers));
+    console.log("Maximum: " + getMax(numbers));
+    console.log("Minimum: " + getMin(numbers));
+}
+
+main();
