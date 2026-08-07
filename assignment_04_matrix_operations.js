@@ -70,3 +70,164 @@
 
 const readlineSync = require('readline-sync');
 
+const readlineSync = require('readline-sync');
+
+function readMatrix(rows, cols) {
+    const matrix = [];
+    for (let i = 0; i < rows; i++) {
+        const line = readlineSync.question(`Enter row ${i + 1}: `);
+        const row = line.trim().split(/\s+/).map(Number);
+        matrix.push(row);
+    }
+    return matrix;
+}
+
+function printMatrix(matrix) {
+    for (let i = 0; i < matrix.length; i++) {
+        let line = "";
+        for (let j = 0; j < matrix[i].length; j++) {
+            line += String(matrix[i][j]).padStart(5);
+        }
+        console.log(line);
+    }
+}
+
+// PART A: Transpose
+function transpose(matrix) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    const result = [];
+
+    for (let j = 0; j < cols; j++) {
+        const newRow = [];
+        for (let i = 0; i < rows; i++) {
+            newRow.push(matrix[i][j]);
+        }
+        result.push(newRow);
+    }
+
+    return result;
+}
+
+// PART B: Add
+function addMatrices(a, b) {
+    const rows = a.length;
+    const cols = a[0].length;
+    const result = [];
+
+    for (let i = 0; i < rows; i++) {
+        const newRow = [];
+        for (let j = 0; j < cols; j++) {
+            newRow.push(a[i][j] + b[i][j]);
+        }
+        result.push(newRow);
+    }
+
+    return result;
+}
+
+// PART C: Multiply
+function multiplyMatrices(a, b) {
+    const rowsA = a.length;
+    const colsA = a[0].length;
+    const colsB = b[0].length;
+    const result = [];
+
+    for (let i = 0; i < rowsA; i++) {
+        const newRow = [];
+        for (let j = 0; j < colsB; j++) {
+            let sum = 0;
+            for (let k = 0; k < colsA; k++) {
+                sum += a[i][k] * b[k][j];
+            }
+            newRow.push(sum);
+        }
+        result.push(newRow);
+    }
+
+    return result;
+}
+
+function validDims(rows, cols) {
+    if (rows <= 0 || cols <= 0) {
+        console.log("Error: Dimensions must be positive.");
+        return false;
+    }
+    return true;
+}
+
+function main() {
+    console.log("Matrix Operations Menu");
+    console.log("1. Transpose a Matrix");
+    console.log("2. Add Two Matrices");
+    console.log("3. Multiply Two Matrices");
+    const choice = readlineSync.questionInt("Enter choice (1-3): ");
+
+    if (choice === 1) {
+        const rows = readlineSync.questionInt("Enter number of rows: ");
+        const cols = readlineSync.questionInt("Enter number of columns: ");
+        if (!validDims(rows, cols)) return;
+
+        console.log("\nEnter Matrix elements:");
+        const a = readMatrix(rows, cols);
+
+        console.log("\nOriginal Matrix:");
+        printMatrix(a);
+
+        const result = transpose(a);
+
+        console.log("\nTransposed Matrix:");
+        printMatrix(result);
+
+    } else if (choice === 2) {
+        const rows = readlineSync.questionInt("Enter number of rows: ");
+        const cols = readlineSync.questionInt("Enter number of columns: ");
+        if (!validDims(rows, cols)) return;
+
+        console.log("\nEnter Matrix A elements:");
+        const a = readMatrix(rows, cols);
+        console.log("\nEnter Matrix B elements:");
+        const b = readMatrix(rows, cols);
+
+        const result = addMatrices(a, b);
+
+        console.log("\nMatrix A:");
+        printMatrix(a);
+        console.log("\nMatrix B:");
+        printMatrix(b);
+        console.log("\nSum (A + B):");
+        printMatrix(result);
+
+    } else if (choice === 3) {
+        const rowsA = readlineSync.questionInt("Enter rows of Matrix A: ");
+        const colsA = readlineSync.questionInt("Enter columns of Matrix A: ");
+        const rowsB = readlineSync.questionInt("Enter rows of Matrix B: ");
+        const colsB = readlineSync.questionInt("Enter columns of Matrix B: ");
+
+        if (!validDims(rowsA, colsA) || !validDims(rowsB, colsB)) return;
+
+        if (colsA !== rowsB) {
+            console.log("Error: Number of columns in A must equal number of rows in B.");
+            return;
+        }
+
+        console.log("\nEnter Matrix A elements:");
+        const a = readMatrix(rowsA, colsA);
+        console.log("\nEnter Matrix B elements:");
+        const b = readMatrix(rowsB, colsB);
+
+        const result = multiplyMatrices(a, b);
+
+        console.log("\nMatrix A:");
+        printMatrix(a);
+        console.log("\nMatrix B:");
+        printMatrix(b);
+        console.log("\nProduct (A x B):");
+        printMatrix(result);
+
+    } else {
+        console.log("Invalid choice.");
+    }
+}
+
+main();
